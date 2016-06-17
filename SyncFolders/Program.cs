@@ -13,9 +13,23 @@ namespace SyncFolders
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ConfigForm());
+            bool runone;
+            System.Threading.Mutex run = new System.Threading.Mutex(true, "jiaao_test", out runone);
+            if (runone)
+            {
+                run.ReleaseMutex();
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new ConfigForm());
+            }
+            else
+            {
+                MessageBox.Show("已经运行了一个实例了。");
+            }
+
+            //Application.EnableVisualStyles();
+            //Application.SetCompatibleTextRenderingDefault(false);
+            //Application.Run(new ConfigForm());
         }
     }
 }

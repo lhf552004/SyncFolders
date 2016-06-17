@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Auto Backup")]
-[assembly: AssemblyDescription("This application is to help backup files or folders automatically from source  folders target folders. The backup only happens when there is a new file or folder or the file is changed.")]
+[assembly: AssemblyTitle("BusinessObjects")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Muehlbauer")]
-[assembly: AssemblyProduct("Auto Backup")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("BusinessObjects")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("003911f1-3738-4cb7-8c47-47da800412a9")]
+[assembly: Guid("3ffedb3a-ce7a-4b2d-a126-5b5b018a2fec")]
 
 // Version information for an assembly consists of the following four values:
 //

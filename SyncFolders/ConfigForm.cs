@@ -8,31 +8,44 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using System.Xml;
+using MaterialSkin;
+using MaterialSkin.Controls;
+using BusinessObjects;
 
 namespace SyncFolders
 {
-    public partial class ConfigForm : Form
+    public partial class ConfigForm : MaterialForm
     {
         public ConfigForm()
         {
             InitializeComponent();
+            var materialSkinManager = MaterialSkinManager.Instance;
+            materialSkinManager.AddFormToManage(this);
+            materialSkinManager.Theme = MaterialSkinManager.Themes.LIGHT;
+            materialSkinManager.ColorScheme = new ColorScheme(Primary.Indigo600, Primary.Indigo500, Primary.Indigo600, Accent.LightBlue200, TextShade.WHITE);
         }
 
         private string _targetPath;
         private string _sourcePath;
-        private const string _configPath = "c:\\syncConfig.xml";
+        private string _configPath = System.Environment.CurrentDirectory + "\\syncConfig.xml";
         XmlDocument configXmlDoc;
         XmlElement root;
         private Dictionary<string, string> pathPair = new Dictionary<string, string>();
-
+        private LogHandler _logHander;
+        private string _logName = "AutoBackup";
+        
 
         private void Main_Load(object sender, EventArgs e)
         {
+            _logHander = new LogHandler("", _logName);
             pathPair.Clear();
             readConfiguration();
             disableStartButton();
             updateList();
+            Utils.readFilters();
         }
+
+        
         private void updateList()
         {
             this.PathPairlistView.Items.Clear();
@@ -47,7 +60,7 @@ namespace SyncFolders
                 lvi.Text = item.Key;
 
                 lvi.SubItems.Add(item.Value);
-
+                
                 this.PathPairlistView.Items.Add(lvi);
                 i++;
             }
@@ -112,6 +125,7 @@ namespace SyncFolders
             {
                 this.Hide();
                 this.WindowState = FormWindowState.Minimized;
+                this.notifyIcon1.ShowBalloonTip(2000, "AutoBackup started", "Thank you for using SyncFolders",ToolTipIcon.Info);
                 startToolStripMenuItem.Enabled = false;
                 stopToolStripMenuItem.Enabled = true;
             }
@@ -166,7 +180,7 @@ namespace SyncFolders
                         {
                             if (targetFile.Name == sourceFile.Name)
                             {
-                                if (sourceFile.LastWriteTime > targetFile.LastWriteTime && sourceFile.Length != targetFile.Length)
+                                if (sourceFile.LastWriteTime > targetFile.LastWriteTime)
                                 {
                                     isNeedToOverride = true;
                                 }
@@ -183,9 +197,11 @@ namespace SyncFolders
 
                 }
             }
-            catch
+            catch(Exception e)
             {
-                Console.WriteLine("无法复制!");
+                _logHander.logging("无法复制! " + e.Message);
+                this.notifyIcon1.ShowBalloonTip(2000, "无法复制", "Please check the log file", ToolTipIcon.Error);
+                //Console.WriteLine("无法复制!");
             }
         }
 
@@ -239,12 +255,14 @@ namespace SyncFolders
                 //删除文件夹
                 //System.IO .Directory .Delete (aimPath,true);
             }
-            catch
+            catch(Exception e)
             {
-                Console.WriteLine("无法删除!");
+                _logHander.logging("无法删除! " + e.Message);
+                this.notifyIcon1.ShowBalloonTip(2000, "无法删除", "Please check the log file", ToolTipIcon.Error);
             }
         }
 
+        
         private void readConfiguration()
         {
             try
@@ -282,9 +300,10 @@ namespace SyncFolders
                 }
                 root = configXmlDoc.DocumentElement;
             }
-            catch
+            catch(Exception e)
             {
-                Console.WriteLine("读取失败!");
+                _logHander.logging("XML读取失败! " + e.Message);
+                this.notifyIcon1.ShowBalloonTip(2000, "XML读取失败", "Please check the log file", ToolTipIcon.Error);
             }
 
         }
@@ -305,8 +324,9 @@ namespace SyncFolders
             }
             catch (Exception e)
             {
-                //显示错误信息  
-                Console.WriteLine(e.Message);
+                //  
+                _logHander.logging(e.Message);
+                this.notifyIcon1.ShowBalloonTip(2000, "XML保存失败", "Please check the log file", ToolTipIcon.Error);
             }
             //Console.ReadLine();  
 
@@ -349,10 +369,7 @@ namespace SyncFolders
             }
         }
 
-        private void PathPairlistView_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
+       
 
         private void DeleteButton_Click(object sender, EventArgs e)
         {
@@ -387,11 +404,7 @@ namespace SyncFolders
             stopToolStripMenuItem.Enabled = true;
         }
 
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
+        
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
@@ -422,6 +435,14 @@ namespace SyncFolders
             this.Show();
             this.WindowState = FormWindowState.Normal;
         }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            About newAbout = new About();
+            newAbout.Show();
+        }
+
+      
 
 
 
