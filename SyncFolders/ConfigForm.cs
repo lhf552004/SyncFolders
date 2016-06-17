@@ -30,15 +30,15 @@ namespace SyncFolders
         {
             pathPair.Clear();
             readConfiguration();
-            disableButtons();
+            disableStartButton();
             updateList();
         }
         private void updateList()
         {
-
+            this.PathPairlistView.Items.Clear();
             this.PathPairlistView.BeginUpdate();   //数据更新，UI暂时挂起，直到EndUpdate绘制控件，可以有效避免闪烁并大大提高加载速度  
             int i = 0;
-            foreach(var item in pathPair)
+            foreach (var item in pathPair)
             {
                 ListViewItem lvi = new ListViewItem();
 
@@ -49,11 +49,11 @@ namespace SyncFolders
                 lvi.SubItems.Add(item.Value);
 
                 this.PathPairlistView.Items.Add(lvi);
-                i ++;
+                i++;
             }
             this.PathPairlistView.EndUpdate();  //结束数据处理，UI界面一次性绘制。  
         }
-        private void disableButtons()
+        private void disableStartButton()
         {
             if (pathPair.Count > 0)
             {
@@ -84,16 +84,16 @@ namespace SyncFolders
 
         private void AddPairButton_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(_sourcePath) && !string.IsNullOrEmpty(_targetPath) )
+            if (!string.IsNullOrEmpty(_sourcePath) && !string.IsNullOrEmpty(_targetPath))
             {
                 if (!pathPair.ContainsKey(_sourcePath))
                 {
                     pathPair.Add(_sourcePath, _targetPath);
-                    
+
                     XmlNode subPar = CreateNode(configXmlDoc, root, "PathPair", null);
                     CreateNode(configXmlDoc, subPar, "sourcePath", _sourcePath);
                     CreateNode(configXmlDoc, subPar, "targetPath", _targetPath);
-                    disableButtons();
+                    disableStartButton();
                     updateList();
                     _targetPath = "";
                     _sourcePath = "";
@@ -106,9 +106,34 @@ namespace SyncFolders
         {
             StartButton.Text = this.timer1.Enabled ? "Start" : "Stop";
             this.timer1.Enabled = !this.timer1.Enabled;
+            disableAllButtons();
 
+            if (timer1.Enabled)
+            {
+                this.Hide();
+                this.WindowState = FormWindowState.Minimized;
+                startToolStripMenuItem.Enabled = false;
+                stopToolStripMenuItem.Enabled = true;
+            }
         }
 
+        private void disableAllButtons()
+        {
+            if (timer1.Enabled)
+            {
+                SelectSourceFolderButton.Enabled = false;
+                SelectTargetFolderbutton.Enabled = false;
+                AddPairButton.Enabled = false;
+                DeleteButton.Enabled = false;
+            }
+            else
+            {
+                SelectSourceFolderButton.Enabled = true;
+                SelectTargetFolderbutton.Enabled = true;
+                AddPairButton.Enabled = true;
+                DeleteButton.Enabled = true;
+            }
+        }
 
         private void updateDir(string sourcePath, string targetPath)
         {
@@ -170,13 +195,16 @@ namespace SyncFolders
         /// </summary>
         /// <param name="sourcePath"></param>
         /// <param name="targetPath"></param>
-        private void deleteTrash(string sourcePath, string targetPath)
+        private void deleteTrash(string sourcePath, string targetPath, bool isParentFolder = false)
         {
             try
             {
                 if (!Directory.Exists(sourcePath))
                 {
-                    Directory.Delete(targetPath, true);
+                    if (!isParentFolder)
+                    {
+                        Directory.Delete(targetPath, true);
+                    }
                     return;
                 }
                 // 检查目标目录是否以目录分割字符结束如果不是则添加之
@@ -195,7 +223,7 @@ namespace SyncFolders
                     // 先当作目录处理如果存在这个目录就递归Delete该目录下面的文件
                     if (Directory.Exists(item))
                     {
-                        
+
                         deleteTrash(sourcePath + Path.GetFileName(item), targetPath + Path.GetFileName(item));
                     }
                     // 否则直接Delete文件
@@ -232,7 +260,7 @@ namespace SyncFolders
                         string targetPath = "";
                         foreach (XmlNode pathNode in pair.ChildNodes)
                         {
-                            
+
                             if (pathNode.Name == "sourcePath")
                             {
                                 sourcePath = pathNode.InnerText;
@@ -240,11 +268,11 @@ namespace SyncFolders
                             if (pathNode.Name == "targetPath")
                             {
                                 targetPath = pathNode.InnerText;
-                            } 
+                            }
                         }
                         if (!string.IsNullOrEmpty(sourcePath) && !pathPair.ContainsKey(targetPath))
                         {
-                            pathPair.Add(sourcePath,targetPath);
+                            pathPair.Add(sourcePath, targetPath);
                         }
                     }
                 }
@@ -317,31 +345,86 @@ namespace SyncFolders
                 sourcePath = item.Key;
                 targetPath = item.Value;
                 updateDir(sourcePath, targetPath);
-                deleteTrash(sourcePath, targetPath);
+                deleteTrash(sourcePath, targetPath, true);
             }
         }
 
         private void PathPairlistView_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+
         }
 
         private void DeleteButton_Click(object sender, EventArgs e)
         {
-            
+
             if (PathPairlistView.SelectedItems.Count > 0)
             {
-               
-               string sourcePath = PathPairlistView.SelectedItems[0].SubItems[0].Text;
-               if (pathPair.ContainsKey(sourcePath))
-               {
-                   pathPair.Remove(sourcePath);
-                   removaeNode(sourcePath);
 
-               }
-               PathPairlistView.SelectedItems[0].Remove();
-               disableButtons();
+                string sourcePath = PathPairlistView.SelectedItems[0].SubItems[0].Text;
+                if (pathPair.ContainsKey(sourcePath))
+                {
+                    pathPair.Remove(sourcePath);
+                    removaeNode(sourcePath);
+
+                }
+                PathPairlistView.SelectedItems[0].Remove();
+                disableStartButton();
             }
         }
+
+        private void stopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StartButton_Click(null, null);
+            startToolStripMenuItem.Enabled = true;
+            stopToolStripMenuItem.Enabled = false;
+
+        }
+
+        private void startToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StartButton_Click(null, null);
+            startToolStripMenuItem.Enabled = false;
+            stopToolStripMenuItem.Enabled = true;
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+            if (MessageBox.Show("Are you sure to exit autoBackup？", "Confirm to exit", MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.OK)
+            {
+                this.notifyIcon1.Visible = false;
+                this.Close();
+                this.Dispose();
+                Application.Exit();
+            }
+        }
+
+        private void configurationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
+        }
+
+        private void ConfigForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            this.Hide();
+            this.WindowState = FormWindowState.Minimized;
+        }
+
+        private void notifyIcon1_DoubleClick(object sender, EventArgs e)
+        {
+            this.Show();
+            this.WindowState = FormWindowState.Normal;
+        }
+
+
+
+
     }
 }

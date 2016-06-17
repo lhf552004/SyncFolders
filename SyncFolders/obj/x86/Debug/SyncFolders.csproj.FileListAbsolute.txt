@@ -1,7 +1,0 @@
-C:\Allen\Projects\MyProjects\C#\SyncFolders\SyncFolders\bin\Debug\SyncFolders.exe
-C:\Allen\Projects\MyProjects\C#\SyncFolders\SyncFolders\bin\Debug\SyncFolders.pdb
-C:\Allen\Projects\MyProjects\C#\SyncFolders\SyncFolders\obj\x86\Debug\SyncFolders.Properties.Resources.resources
-C:\Allen\Projects\MyProjects\C#\SyncFolders\SyncFolders\obj\x86\Debug\SyncFolders.csproj.GenerateResource.Cache
-C:\Allen\Projects\MyProjects\C#\SyncFolders\SyncFolders\obj\x86\Debug\SyncFolders.exe
-C:\Allen\Projects\MyProjects\C#\SyncFolders\SyncFolders\obj\x86\Debug\SyncFolders.pdb
-C:\Allen\Projects\MyProjects\C#\SyncFolders\SyncFolders\obj\x86\Debug\SyncFolders.ConfigForm.resources
