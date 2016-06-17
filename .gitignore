@@ -2,4 +2,6 @@
 *.vshost.exe
 *.vshost.exe.manifest
 obj/
+bin/
+
 

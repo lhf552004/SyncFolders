@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Auto Backup")]
-[assembly: AssemblyDescription("This application is to help backup files or folders automatically from source  folders target folders. The backup only happens when there is a new file or folder or the file is changed.")]
+[assembly: AssemblyDescription("This application is to help backup files or folders automatically from source  folders target folders. The backup only happens when there is a new file or folder or the file is changed.                                                If you have any question, please contact me allen.li@muehlbauer.cn")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Muehlbauer")]
 [assembly: AssemblyProduct("Auto Backup")]

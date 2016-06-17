@@ -28,25 +28,59 @@ namespace SyncFolders
         {
 
         }
-        
+
         private void AddButton_Click(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(NewFilterText.Text))
             {
                 Utils.addFilter(NewFilterText.Text);
+                this.FilterListBox.Items.Add(NewFilterText.Text);
+                NewFilterText.Text = "";
             }
-           
+
 
         }
 
         private void DeleteButton_Click(object sender, EventArgs e)
         {
+            if (FilterListBox.SelectedItems.Count > 0)
+            {
 
+                string filterToDelete = FilterListBox.SelectedItems[0].ToString();
+                Utils.deleteFilter(filterToDelete);
+                this.FilterListBox.Items.Remove(FilterListBox.SelectedItems[0]);
+            }
         }
 
         private void Filters_Load(object sender, EventArgs e)
         {
             Utils.readFilters();
+            updateList();
+
+        }
+        private void updateList()
+        {
+            this.FilterListBox.Items.Clear();
+            this.FilterListBox.BeginUpdate();
+            foreach (var filter in Utils.Filters)
+            {
+                this.FilterListBox.Items.Add(filter.ToString());
+
+            }
+            this.FilterListBox.EndUpdate();
+        }
+
+        private void NewFilterText_Click(object sender, EventArgs e)
+        {
+            NewFilterText.Text = "";
+        }
+
+        private void NewFilterText_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                AddButton_Click(null, null);
+            }
         }
     }
 }

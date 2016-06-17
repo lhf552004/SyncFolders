@@ -50,6 +50,7 @@
             this.PathPairlistView = new System.Windows.Forms.ListView();
             this.SourcePathColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.TargetPathColumnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.SetFiltersButton = new MaterialSkin.Controls.MaterialRaisedButton();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -75,19 +76,19 @@
             this.configurationToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(153, 136);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(149, 114);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // startToolStripMenuItem
             // 
             this.startToolStripMenuItem.Name = "startToolStripMenuItem";
-            this.startToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.startToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.startToolStripMenuItem.Text = "Start";
             this.startToolStripMenuItem.Click += new System.EventHandler(this.startToolStripMenuItem_Click);
             // 
@@ -95,21 +96,21 @@
             // 
             this.stopToolStripMenuItem.Enabled = false;
             this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
-            this.stopToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.stopToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.stopToolStripMenuItem.Text = "Stop";
             this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
             // 
             // configurationToolStripMenuItem
             // 
             this.configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
-            this.configurationToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.configurationToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.configurationToolStripMenuItem.Text = "Configuration";
             this.configurationToolStripMenuItem.Click += new System.EventHandler(this.configurationToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -228,11 +229,25 @@
             this.TargetPathColumnHeader.Text = "TargetPath";
             this.TargetPathColumnHeader.Width = 278;
             // 
+            // SetFiltersButton
+            // 
+            this.SetFiltersButton.Depth = 0;
+            this.SetFiltersButton.Location = new System.Drawing.Point(886, 193);
+            this.SetFiltersButton.MouseState = MaterialSkin.MouseState.HOVER;
+            this.SetFiltersButton.Name = "SetFiltersButton";
+            this.SetFiltersButton.Primary = true;
+            this.SetFiltersButton.Size = new System.Drawing.Size(189, 57);
+            this.SetFiltersButton.TabIndex = 10;
+            this.SetFiltersButton.Text = "Set Filters";
+            this.SetFiltersButton.UseVisualStyleBackColor = true;
+            this.SetFiltersButton.Click += new System.EventHandler(this.SetFiltersButton_Click);
+            // 
             // ConfigForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1115, 419);
+            this.Controls.Add(this.SetFiltersButton);
             this.Controls.Add(this.PathPairlistView);
             this.Controls.Add(this.TargetPathLabel);
             this.Controls.Add(this.SourcePathLabel);
@@ -275,6 +290,7 @@
         private System.Windows.Forms.ListView PathPairlistView;
         private System.Windows.Forms.ColumnHeader SourcePathColumnHeader;
         private System.Windows.Forms.ColumnHeader TargetPathColumnHeader;
+        private MaterialSkin.Controls.MaterialRaisedButton SetFiltersButton;
        
     }
 }

@@ -47,17 +47,21 @@ namespace BusinessObjects
         public static void addFilter(string filterText)
         {
             Filters.Add(filterText);
-            StreamWriter wr = new StreamWriter(FilterPath);
+            StreamWriter wr = new StreamWriter(FilterPath,true);
             wr.WriteLine(filterText);
             wr.Close();
         }
 
         public static void deleteFilter(string filterText)
         {
-            Filters.Add(filterText);
-            StreamWriter wr = new StreamWriter(FilterPath);
-            wr.WriteLine(filterText);
-            wr.Close();
+            Filters.Remove(filterText);
+            StreamWriter sw = new StreamWriter(FilterPath, false);
+            foreach (var filter in Filters)
+            {
+                sw.WriteLine(filter);
+            }
+            sw.Flush();
+            sw.Close();
         }
     }
 }

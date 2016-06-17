@@ -33,7 +33,7 @@ namespace SyncFolders
         private Dictionary<string, string> pathPair = new Dictionary<string, string>();
         private LogHandler _logHander;
         private string _logName = "AutoBackup";
-        
+
 
         private void Main_Load(object sender, EventArgs e)
         {
@@ -45,7 +45,7 @@ namespace SyncFolders
             Utils.readFilters();
         }
 
-        
+
         private void updateList()
         {
             this.PathPairlistView.Items.Clear();
@@ -60,7 +60,7 @@ namespace SyncFolders
                 lvi.Text = item.Key;
 
                 lvi.SubItems.Add(item.Value);
-                
+
                 this.PathPairlistView.Items.Add(lvi);
                 i++;
             }
@@ -125,7 +125,7 @@ namespace SyncFolders
             {
                 this.Hide();
                 this.WindowState = FormWindowState.Minimized;
-                this.notifyIcon1.ShowBalloonTip(2000, "AutoBackup started", "Thank you for using SyncFolders",ToolTipIcon.Info);
+                this.notifyIcon1.ShowBalloonTip(2000, "AutoBackup started", "Thank you for using SyncFolders", ToolTipIcon.Info);
                 startToolStripMenuItem.Enabled = false;
                 stopToolStripMenuItem.Enabled = true;
             }
@@ -166,6 +166,10 @@ namespace SyncFolders
                 // 遍历所有的文件和目录
                 foreach (string item in fileList)
                 {
+                    if (isFiltered(item))
+                    {
+                        continue;
+                    }
                     // 先当作目录处理如果存在这个目录就递归Copy该目录下面的文件
                     if (Directory.Exists(item))
                         updateDir(item, targetPath + Path.GetFileName(item));
@@ -197,14 +201,41 @@ namespace SyncFolders
 
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logHander.logging("无法复制! " + e.Message);
                 this.notifyIcon1.ShowBalloonTip(2000, "无法复制", "Please check the log file", ToolTipIcon.Error);
                 //Console.WriteLine("无法复制!");
             }
         }
+        /// <summary>
+        /// use the filter list to filter the source path
+        /// </summary>
+        /// <param name="file">it means file or folder</param>
+        /// <returns></returns>
+        private bool isFiltered(string item)
+        {
+            if (Directory.Exists(item))
+            {
+                if (item[item.Length - 1] != Path.DirectorySeparatorChar)
+                    item += Path.DirectorySeparatorChar;
 
+            }
+            foreach (var filter in Utils.Filters)
+            {
+                string path = filter.ToString();
+                //file type
+                if (path.ToString().StartsWith("*"))
+                {
+                    path = path.Substring(1);
+                }
+                if (item.EndsWith(path))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
         /// <summary>
         /// Inspect the file is existed in the sourcePath, 
         /// if not, delete it in the targetPath
@@ -255,14 +286,14 @@ namespace SyncFolders
                 //删除文件夹
                 //System.IO .Directory .Delete (aimPath,true);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logHander.logging("无法删除! " + e.Message);
                 this.notifyIcon1.ShowBalloonTip(2000, "无法删除", "Please check the log file", ToolTipIcon.Error);
             }
         }
 
-        
+
         private void readConfiguration()
         {
             try
@@ -300,7 +331,7 @@ namespace SyncFolders
                 }
                 root = configXmlDoc.DocumentElement;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 _logHander.logging("XML读取失败! " + e.Message);
                 this.notifyIcon1.ShowBalloonTip(2000, "XML读取失败", "Please check the log file", ToolTipIcon.Error);
@@ -369,7 +400,7 @@ namespace SyncFolders
             }
         }
 
-       
+
 
         private void DeleteButton_Click(object sender, EventArgs e)
         {
@@ -404,7 +435,7 @@ namespace SyncFolders
             stopToolStripMenuItem.Enabled = true;
         }
 
-        
+
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
@@ -442,7 +473,14 @@ namespace SyncFolders
             newAbout.Show();
         }
 
-      
+        private void SetFiltersButton_Click(object sender, EventArgs e)
+        {
+            Filters filterFrm = new Filters();
+
+            filterFrm.ShowDialog();
+        }
+
+
 
 
 

@@ -32,7 +32,7 @@
             this.NewFilterText = new MaterialSkin.Controls.MaterialSingleLineTextField();
             this.AddButton = new MaterialSkin.Controls.MaterialFlatButton();
             this.DeleteButton = new MaterialSkin.Controls.MaterialFlatButton();
-            this.FilterListView = new System.Windows.Forms.ListView();
+            this.FilterListBox = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // NewFilterLabel
@@ -65,7 +65,9 @@
             this.NewFilterText.TabStop = false;
             this.NewFilterText.Text = "*.";
             this.NewFilterText.UseSystemPasswordChar = false;
+            this.NewFilterText.Click += new System.EventHandler(this.NewFilterText_Click);
             this.NewFilterText.Enter += new System.EventHandler(this.NewFilterText_Enter);
+            this.NewFilterText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.NewFilterText_KeyDown);
             // 
             // AddButton
             // 
@@ -99,20 +101,20 @@
             this.DeleteButton.UseVisualStyleBackColor = true;
             this.DeleteButton.Click += new System.EventHandler(this.DeleteButton_Click);
             // 
-            // FilterListView
+            // FilterListBox
             // 
-            this.FilterListView.Location = new System.Drawing.Point(27, 133);
-            this.FilterListView.Name = "FilterListView";
-            this.FilterListView.Size = new System.Drawing.Size(292, 291);
-            this.FilterListView.TabIndex = 5;
-            this.FilterListView.UseCompatibleStateImageBehavior = false;
+            this.FilterListBox.FormattingEnabled = true;
+            this.FilterListBox.Location = new System.Drawing.Point(31, 137);
+            this.FilterListBox.Name = "FilterListBox";
+            this.FilterListBox.Size = new System.Drawing.Size(273, 277);
+            this.FilterListBox.TabIndex = 6;
             // 
             // Filters
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(440, 455);
-            this.Controls.Add(this.FilterListView);
+            this.Controls.Add(this.FilterListBox);
             this.Controls.Add(this.DeleteButton);
             this.Controls.Add(this.AddButton);
             this.Controls.Add(this.NewFilterText);
@@ -131,6 +133,6 @@
         private MaterialSkin.Controls.MaterialSingleLineTextField NewFilterText;
         private MaterialSkin.Controls.MaterialFlatButton AddButton;
         private MaterialSkin.Controls.MaterialFlatButton DeleteButton;
-        private System.Windows.Forms.ListView FilterListView;
+        private System.Windows.Forms.ListBox FilterListBox;
     }
 }
